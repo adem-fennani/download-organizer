@@ -1,0 +1,90 @@
+# Download Organizer Configuration Example
+# Copy this file to config.yaml and customize for your setup
+
+# Source directory (use ~ for home directory)
+source_directory: "~/Downloads"
+
+# Base destination directory where organized files will be moved
+base_destination: "D:/Storage Buffer"
+
+# File type mappings
+# Each category maps file extensions to a destination folder
+file_types:
+  pdf:
+    extensions: [".pdf"]
+    destination: "PDF"
+  
+  images:
+    extensions: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp"]
+    destination: "Images"
+  
+  videos:
+    extensions: [".mp4", ".mov", ".avi", ".mkv", ".flv", ".wmv"]
+    destination: "Videos"
+  
+  audio:
+    extensions: [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a"]
+    destination: "Audio"
+  
+  documents:
+    extensions: [".doc", ".docx", ".txt", ".rtf", ".odt"]
+    destination: "Documents"
+  
+  spreadsheets:
+    extensions: [".xls", ".xlsx", ".csv", ".ods"]
+    destination: "Spreadsheets"
+  
+  presentations:
+    extensions: [".ppt", ".pptx", ".odp"]
+    destination: "Presentations"
+  
+  sql:
+    extensions: [".sql", ".db", ".sqlite"]
+    destination: "SQL"
+  
+  executables:
+    extensions: [".exe", ".msi", ".dmg", ".app"]
+    destination: "Executables"
+  
+  compressed:
+    extensions: [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"]
+    destination: "Compressed"
+  
+  code:
+    extensions: [".py", ".js", ".java", ".cpp", ".c", ".h", ".cs", ".php", ".rb", ".go"]
+    destination: "Code"
+
+# Folder organization settings
+folders:
+  # Whether to move folders by default
+  enabled: false
+  
+  # Destination for compressed folders (folders containing compressed files)
+  compressed_destination: "Compressed Folders"
+  
+  # Destination for regular folders
+  regular_destination: "Folders"
+
+# Destination for files that don't match any category
+other_destination: "Other"
+
+# Logging configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_file: "download_organizer.log"
+  log_to_console: true
+  log_to_file: true
+
+# Operation settings
+settings:
+  # Show what would be moved without actually moving
+  dry_run: false
+  
+  # Create destination directories if they don't exist
+  create_directories: true
+  
+  # Handle file name conflicts by appending numbers
+  handle_conflicts: true
+  
+  # Skip hidden files (starting with .)
+  skip_hidden_files: true

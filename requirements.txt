@@ -1,0 +1,8 @@
+PyYAML>=6.0
+
+# Optional dependencies for real-time monitoring
+watchdog>=3.0.0
+
+# Development dependencies (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
