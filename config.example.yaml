@@ -59,7 +59,7 @@ file_types:
     destination: "Compressed"
   
   code:
-    extensions: [".py", ".js", ".java", ".cpp", ".c", ".h", ".cs", ".php", ".rb", ".go"]
+    extensions: [".py", ".js", ".jsx", ".ts", ".tsx", ".cs", ".java", ".cpp", ".c", ".h", ".go", ".rb", ".php", ".swift", ".kt", ".rs"]
     destination: "Code"
 
 # Folder organization settings
