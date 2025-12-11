@@ -34,6 +34,14 @@ file_types:
     extensions: [".xls", ".xlsx", ".csv", ".ods"]
     destination: "Spreadsheets"
   
+  web:
+    extensions: [".html", ".htm", ".css", ".xml", ".json"]
+    destination: "Web"
+  
+  notebooks:
+    extensions: [".ipynb"]
+    destination: "Notebooks"
+  
   presentations:
     extensions: [".ppt", ".pptx", ".odp"]
     destination: "Presentations"
