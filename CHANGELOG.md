@@ -1,6 +1,30 @@
 # Changelog
 
-All notable changes to the Download Organizer project.
+All notable changes to the download-organizer project.
+
+## [1.1.0] - 2025-12-11
+
+### Added
+- **Extended File Type Support**: Added support for additional file extensions
+  - Documents: `.txt`, `.docx`
+  - Spreadsheets: `.csv`, `.xlsx`
+  - Presentations: `.ppt`, `.pptx`
+  - Web files: `.html`
+  - Notebooks: `.ipynb`
+  - Code files: `.py`, `.js`, `.jsx`, `.ts`, `.tsx`, `.cs`, `.java`, `.cpp`, `.c`, `.h`, `.go`, `.rb`, `.php`, `.swift`, `.kt`, `.rs`
+- **New Configuration Categories**: 
+  - `documents` category for text and Word documents
+  - `spreadsheets` category for Excel and CSV files
+  - `presentations` category for PowerPoint files
+  - `web` category for HTML files
+  - `notebooks` category for Jupyter notebooks
+  - `code` category for programming language files
+
+### Changed
+- Updated `config.yaml` with new file type mappings
+- Updated `config.example.yaml` to include all new extensions
+- Updated README.md to reflect new file type support
+- Project name standardized to `download-organizer` throughout documentation
 
 ## [1.0.0] - 2025-12-01
 
