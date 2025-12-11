@@ -1,9 +1,9 @@
-# DownloadOrganizer
+# download-organizer
 
 A modern, configurable Python tool to automatically organize files and folders from your Downloads directory into a structured storage system.
 
 ## Overview
-DownloadOrganizer is a refactored, professional-grade file organization tool that sorts files by type (e.g., `.pdf`, `.jpg`, `.mp4`) into designated folders. Built with best practices including configuration files, comprehensive logging, dry-run mode, conflict resolution, and full test coverage.
+download-organizer is a refactored, professional-grade file organization tool that sorts files by type (e.g., `.pdf`, `.jpg`, `.mp4`) into designated folders. Built with best practices including configuration files, comprehensive logging, dry-run mode, conflict resolution, and full test coverage.
 
 ## ✨ Features
 - **Configuration-Driven**: All settings in a single YAML file - no hard-coded paths
@@ -97,9 +97,42 @@ file_types:
   pdf:
     extensions: [".pdf"]
     destination: "PDF"
+  
+  documents:
+    extensions: [".docx", ".txt"]
+    destination: "Documents"
+  
+  spreadsheets:
+    extensions: [".csv", ".xlsx"]
+    destination: "Spreadsheets"
+  
+  presentations:
+    extensions: [".ppt", ".pptx"]
+    destination: "Presentations"
+  
+  code:
+    extensions: [".py", ".js", ".jsx", ".ts", ".tsx", ".cs", ".java"]
+    destination: "Code"
+  
+  notebooks:
+    extensions: [".ipynb"]
+    destination: "Notebooks"
+  
+  web:
+    extensions: [".html"]
+    destination: "Web"
+  
   images:
     extensions: [".jpg", ".jpeg", ".png"]
     destination: "Images"
+  
+  videos:
+    extensions: [".mp4", ".mov"]
+    destination: "Videos"
+  
+  compressed:
+    extensions: [".zip", ".rar", ".7z"]
+    destination: "Compressed"
   # Add more types as needed
 
 # Logging configuration
@@ -139,12 +172,14 @@ python -m pytest test_organizer.py -v
 ## 📂 Project Structure
 
 ```
-DownloadOrganizer/
+download-organizer/
 ├── organizer.py              # Main refactored script
 ├── config.yaml               # Configuration file
+├── config.example.yaml       # Example configuration
 ├── test_organizer.py         # Unit tests
 ├── requirements.txt          # Python dependencies
 ├── watch_downloads.py        # Optional: Real-time monitoring
+├── CHANGELOG.md              # Version history
 ├── README.md                 # This file
 └── legacy/                   # Original scripts (deprecated)
     ├── clean_downloads.py
