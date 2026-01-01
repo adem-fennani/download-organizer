@@ -2,6 +2,39 @@
 
 All notable changes to the download-organizer project.
 
+## [1.2.0] - 2026-01-01
+
+### Added
+- **Comprehensive File Extension Support**: Significantly expanded file type coverage to minimize files going to "Other" folder
+  - **Ebooks**: `.epub`, `.mobi`, `.azw`, `.azw3`, `.djvu`
+  - **Design**: `.psd`, `.ai`, `.sketch`, `.xd`, `.fig`, `.indd`
+  - **Data/Config**: `.json`, `.yaml`, `.yml`, `.toml`, `.ini`, `.cfg`, `.conf`
+  - **Scripts**: `.sh`, `.bash`, `.zsh`, `.ps1`, `.bat`, `.cmd`
+  - **Templates**: `.jinja`, `.jinja2`, `.j2`, `.tmpl`
+  - **Data Science**: `.parquet`, `.feather`, `.hdf5`, `.h5`, `.mat`
+  - **Disk Images**: `.iso`, `.img`, `.vhd`, `.vmdk`
+  - **3D Models**: `.obj`, `.fbx`, `.stl`, `.blend`, `.max`, `.3ds`, `.dwg`, `.dxf`
+  - **Fonts**: `.ttf`, `.otf`, `.woff`, `.woff2`
+  - **Certificates**: `.pem`, `.crt`, `.cer`, `.key`, `.p12`, `.pfx`
+  - **Backups**: `.bak`, `.backup`, `.old`, `.tmp`
+
+### Enhanced
+- **Documents**: Added `.md`, `.markdown`, `.rst`, `.tex`, `.doc`, `.rtf`, `.odt`
+- **Images**: Added `.tiff`, `.tif`, `.ico`, `.heic`, `.heif`, `.gif`, `.bmp`, `.svg`, `.webp`
+- **Videos**: Added `.webm`, `.m4v`, `.avi`, `.mkv`, `.flv`, `.wmv`
+- **Audio**: Added `.wma`, `.opus`
+- **Web**: Added `.htm`, `.scss`, `.sass`, `.less`
+- **Code**: Added `.r`, `.m`, `.scala`, `.pl`, `.lua`
+- **SQL**: Added `.db`, `.sqlite3`
+- **Spreadsheets**: Added `.xls`, `.ods`
+- **Presentations**: Added `.odp`
+- **Executables**: Added `.deb`, `.rpm`, `.apk`
+- **Compressed**: Added `.xz`
+
+### Changed
+- Updated `config.yaml` with 15+ new file categories and 60+ new file extensions
+- Updated `config.example.yaml` with same comprehensive coverage
+
 ## [1.1.0] - 2025-12-11
 
 ### Added
