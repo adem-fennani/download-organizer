@@ -15,28 +15,40 @@ file_types:
     destination: "PDF"
   
   images:
-    extensions: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp"]
+    extensions: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp", ".tiff", ".tif", ".ico", ".heic", ".heif"]
     destination: "Images"
   
+  design:
+    extensions: [".psd", ".ai", ".sketch", ".xd", ".fig", ".indd"]
+    destination: "Design"
+  
   videos:
-    extensions: [".mp4", ".mov", ".avi", ".mkv", ".flv", ".wmv"]
+    extensions: [".mp4", ".mov", ".avi", ".mkv", ".flv", ".wmv", ".webm", ".m4v"]
     destination: "Videos"
   
   audio:
-    extensions: [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a"]
+    extensions: [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a", ".wma", ".opus"]
     destination: "Audio"
   
   documents:
-    extensions: [".doc", ".docx", ".txt", ".rtf", ".odt"]
+    extensions: [".doc", ".docx", ".txt", ".rtf", ".odt", ".md", ".markdown", ".rst", ".tex"]
     destination: "Documents"
+  
+  ebooks:
+    extensions: [".epub", ".mobi", ".azw", ".azw3", ".djvu"]
+    destination: "Ebooks"
   
   spreadsheets:
     extensions: [".xls", ".xlsx", ".csv", ".ods"]
     destination: "Spreadsheets"
   
   web:
-    extensions: [".html", ".htm", ".css", ".xml", ".json"]
+    extensions: [".html", ".htm", ".css", ".scss", ".sass", ".less", ".xml"]
     destination: "Web"
+  
+  data:
+    extensions: [".json", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".conf"]
+    destination: "Data"
   
   notebooks:
     extensions: [".ipynb"]
@@ -47,20 +59,52 @@ file_types:
     destination: "Presentations"
   
   sql:
-    extensions: [".sql", ".db", ".sqlite"]
+    extensions: [".sql", ".db", ".sqlite", ".sqlite3"]
     destination: "SQL"
   
+  data_science:
+    extensions: [".parquet", ".feather", ".hdf5", ".h5", ".mat"]
+    destination: "Data Science"
+  
   executables:
-    extensions: [".exe", ".msi", ".dmg", ".app"]
+    extensions: [".exe", ".msi", ".dmg", ".app", ".deb", ".rpm", ".apk"]
     destination: "Executables"
+  
+  disk_images:
+    extensions: [".iso", ".img", ".vhd", ".vmdk"]
+    destination: "Disk Images"
   
   compressed:
     extensions: [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"]
     destination: "Compressed"
   
   code:
-    extensions: [".py", ".js", ".jsx", ".ts", ".tsx", ".cs", ".java", ".cpp", ".c", ".h", ".go", ".rb", ".php", ".swift", ".kt", ".rs"]
+    extensions: [".py", ".js", ".jsx", ".ts", ".tsx", ".cs", ".java", ".cpp", ".c", ".h", ".go", ".rb", ".php", ".swift", ".kt", ".rs", ".r", ".m", ".scala", ".pl", ".lua"]
     destination: "Code"
+  
+  scripts:
+    extensions: [".sh", ".bash", ".zsh", ".ps1", ".bat", ".cmd"]
+    destination: "Scripts"
+  
+  templates:
+    extensions: [".jinja", ".jinja2", ".j2", ".tmpl"]
+    destination: "Templates"
+  
+  models_3d:
+    extensions: [".obj", ".fbx", ".stl", ".blend", ".max", ".3ds", ".dwg", ".dxf"]
+    destination: "3D Models"
+  
+  fonts:
+    extensions: [".ttf", ".otf", ".woff", ".woff2"]
+    destination: "Fonts"
+  
+  certificates:
+    extensions: [".pem", ".crt", ".cer", ".key", ".p12", ".pfx"]
+    destination: "Certificates"
+  
+  backups:
+    extensions: [".bak", ".backup", ".old", ".tmp"]
+    destination: "Backups"
 
 # Folder organization settings
 folders:
