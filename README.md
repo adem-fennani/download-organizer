@@ -218,6 +218,49 @@ python watch_downloads.py
 
 This uses the watchdog library to monitor your downloads folder and organize files in real-time.
 
+### Scheduled Automation (Windows Task Scheduler)
+
+To run the organizer automatically on a schedule:
+
+**1. Copy and customize the batch file:**
+```bash
+# Copy the example file
+copy run_organizer.example.bat run_organizer.bat
+
+# Edit if needed (most users won't need to)
+notepad run_organizer.bat
+```
+
+**2. Test the batch file:**
+```bash
+run_organizer.bat
+```
+
+**3. Set up Task Scheduler:**
+- Open Task Scheduler (search in Start menu)
+- Click "Create Basic Task..."
+- Name it (e.g., "Organize Downloads")
+- Set trigger (e.g., Weekly, every Sunday at 10:00 AM)
+- Choose "Start a program"
+- Browse to your `run_organizer.bat` file
+- Finish the wizard
+
+**4. Configure task settings:**
+- Open the task properties
+- Under "General" tab:
+  - Uncheck "Do not store password"
+  - Select "Run whether user is logged on or not"
+- Under "Actions" tab: Verify the batch file path
+- Click OK and enter your Windows password when prompted
+- Right-click the task → "Run" to test
+
+The script will now run automatically at your scheduled time!
+
+**Finding your Python path** (if needed):
+```powershell
+where.exe python
+```
+
 ## 📊 Example Output
 
 ```

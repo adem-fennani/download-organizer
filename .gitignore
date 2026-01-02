@@ -47,6 +47,8 @@ desktop.ini
 # Project specific
 config.yaml
 !config.example.yaml
+run_organizer.bat
+!run_organizer.example.bat
 
 # Testing
 .pytest_cache/
