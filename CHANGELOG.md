@@ -2,6 +2,19 @@
 
 All notable changes to the download-organizer project.
 
+## [1.3.0] - 2026-01-03
+
+### Added
+- **Windows Task Scheduler Integration**: Added batch file support for automated scheduling
+  - `run_organizer.example.bat` - Example batch file for Windows automation
+  - Comprehensive documentation in README for setting up scheduled tasks
+  - Step-by-step guide for Windows Task Scheduler configuration
+  - Instructions for finding Python path and testing automation
+
+### Changed
+- Updated README with detailed "Scheduled Automation" section
+- Enhanced documentation for Windows users wanting automatic organization
+
 ## [1.2.0] - 2026-01-01
 
 ### Added
