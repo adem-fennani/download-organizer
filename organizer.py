@@ -39,6 +39,7 @@ class DownloadOrganizer:
     def __init__(self, config_path: str = "config.yaml"):
         """Initialize the organizer with configuration."""
         self.config = self._load_config(config_path)
+        self._validate_config(self.config)
         self.stats = OrganizationStats()
         self._setup_logging()
         self.logger = logging.getLogger(__name__)
@@ -56,6 +57,17 @@ class DownloadOrganizer:
             )
         except yaml.YAMLError as e:
             raise ValueError(f"Error parsing configuration file: {e}")
+    
+    def _validate_config(self, config: dict) -> None:
+        """Validate required configuration keys."""
+        required_keys = ['source_directory', 'base_destination']
+        missing_keys = [key for key in required_keys if key not in config]
+        
+        if missing_keys:
+            raise ValueError(
+                f"Missing required configuration keys: {', '.join(missing_keys)}\n"
+                "Please check your config.yaml file."
+            )
     
     def _setup_logging(self) -> None:
         """Configure logging based on config settings."""
