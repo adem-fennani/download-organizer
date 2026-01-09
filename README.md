@@ -180,35 +180,10 @@ download-organizer/
 ├── requirements.txt          # Python dependencies
 ├── watch_downloads.py        # Optional: Real-time monitoring
 ├── CHANGELOG.md              # Version history
-├── README.md                 # This file
-└── legacy/                   # Original scripts (deprecated)
-    ├── clean_downloads.py
-    ├── move_pdf.py
-    └── ...
+└── README.md                 # This file
 ```
 
-## 🔄 Migration from Legacy Scripts
-
-The new `organizer.py` replaces all legacy scripts (`clean_downloads.py`, `move_*.py`) with a single, maintainable solution.
-
-**Old way:**
-```bash
-python clean_downloads.py --folders
-```
-
-**New way:**
-```bash
-python organizer.py --folders
-```
-
-Benefits:
-- ✅ No hard-coded paths
-- ✅ Single file to maintain
-- ✅ Better error handling
-- ✅ Comprehensive logging
-- ✅ Test coverage
-
-## 🔧 Advanced Features
+##  Advanced Features
 
 ### Real-Time Monitoring (Optional)
 Use `watch_downloads.py` to automatically organize files as they're downloaded:
@@ -222,13 +197,31 @@ This uses the watchdog library to monitor your downloads folder and organize fil
 
 To run the organizer automatically on a schedule:
 
-**1. Copy and customize the batch file:**
-```bash
-# Copy the example file
-copy run_organizer.example.bat run_organizer.bat
+**1. Set up the batch file:**
 
-# Edit if needed (most users won't need to)
-notepad run_organizer.bat
+Copy the example batch file:
+```bash
+copy run_organizer.example.bat run_organizer.bat
+```
+
+The batch file contains:
+```bat
+@echo off
+cd /d "%~dp0"
+python organizer.py
+```
+
+**Customization options:**
+- **Option A (Default)**: If Python is in your system PATH, use the file as-is
+- **Option B**: If Python is NOT in your PATH, replace `python organizer.py` with the full path to your Python installation:
+  ```bat
+  "C:\Users\YourUsername\AppData\Local\Programs\Python\Python311\python.exe" organizer.py
+  ```
+- **Optional**: Add `pause` at the end to see output before the window closes
+
+To find your Python path, run in PowerShell:
+```powershell
+where.exe python
 ```
 
 **2. Test the batch file:**
@@ -255,11 +248,6 @@ run_organizer.bat
 - Right-click the task → "Run" to test
 
 The script will now run automatically at your scheduled time!
-
-**Finding your Python path** (if needed):
-```powershell
-where.exe python
-```
 
 ## 📊 Example Output
 
@@ -316,9 +304,6 @@ This project is open source and available under the MIT License.
 
 ## 📞 Support
 For issues, questions, or suggestions, please open an issue on GitHub.
-
-## ⚠️ Legacy Scripts (Deprecated)
-The original scripts (`clean_downloads.py`, `move_*.py`) are kept for reference but are deprecated. Please use `organizer.py` for all new projects.
 
 ## Contributing
 Feel free to fork this repository, submit pull requests, or open issues for bugs or enhancements. Suggestions for additional file types or optimization are welcome!

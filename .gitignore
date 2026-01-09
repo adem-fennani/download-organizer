@@ -48,6 +48,7 @@ desktop.ini
 config.yaml
 !config.example.yaml
 run_organizer.bat
+legacy/
 !run_organizer.example.bat
 
 # Testing
