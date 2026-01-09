@@ -2,6 +2,24 @@
 
 All notable changes to the download-organizer project.
 
+## [1.3.1] - 2026-01-09
+
+### Added
+- **Configuration Validation**: Added validation for required configuration keys (`source_directory`, `base_destination`)
+  - Prevents runtime crashes with clear error messages if required keys are missing
+  - Improves user experience with helpful error messages
+
+### Changed
+- **Simplified Batch File**: Removed all comments from `run_organizer.example.bat` for cleaner code
+- **Enhanced Documentation**: Moved batch file setup instructions from comments to README.md
+  - Added detailed "Scheduled Automation" section with step-by-step instructions
+  - Improved clarity for both Python-in-PATH and custom Python path scenarios
+
+### Removed
+- **Legacy Folder**: Removed deprecated legacy scripts from version control
+  - Folder still available locally but no longer tracked in git
+  - Reduced repository clutter and confusion for new users
+
 ## [1.3.0] - 2026-01-03
 
 ### Added
