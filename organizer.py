@@ -190,18 +190,18 @@ class DownloadOrganizer:
             return False
     
     def _is_compressed_folder(self, folder_path: Path) -> bool:
-        """Check if a folder contains or is a compressed file."""
+        """Check if a folder contains compressed files (shallow check)."""
         # Check if folder name has compressed extension
         if folder_path.suffix.lower() in self._compressed_exts:
             return True
         
-        # Check if folder contains compressed files
+        # Check only top-level files (don't recurse)
         try:
-            for item in folder_path.rglob('*'):
+            for item in folder_path.iterdir():
                 if item.is_file() and item.suffix.lower() in self._compressed_exts:
                     return True
         except (PermissionError, OSError) as e:
-            self.logger.warning(f"Could not fully check {folder_path.name}: {e}")
+            self.logger.warning(f"Could not check {folder_path.name}: {e}")
         
         return False
     
