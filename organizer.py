@@ -41,6 +41,7 @@ class DownloadOrganizer:
         self.config = self._load_config(config_path)
         self._validate_config(self.config)
         self.stats = OrganizationStats()
+        self._compressed_exts = self._build_compressed_extensions()
         self._setup_logging()
         self.logger = logging.getLogger(__name__)
         
@@ -68,6 +69,14 @@ class DownloadOrganizer:
                 f"Missing required configuration keys: {', '.join(missing_keys)}\n"
                 "Please check your config.yaml file."
             )
+    
+    def _build_compressed_extensions(self) -> set:
+        """Build and cache compressed file extensions."""
+        compressed_exts = set()
+        for info in self.config.get('file_types', {}).values():
+            if 'compressed' in str(info.get('destination', '')).lower():
+                compressed_exts.update(info.get('extensions', []))
+        return compressed_exts
     
     def _setup_logging(self) -> None:
         """Configure logging based on config settings."""
@@ -182,19 +191,14 @@ class DownloadOrganizer:
     
     def _is_compressed_folder(self, folder_path: Path) -> bool:
         """Check if a folder contains or is a compressed file."""
-        compressed_exts = set()
-        for info in self.config.get('file_types', {}).values():
-            if 'compressed' in str(info.get('destination', '')).lower():
-                compressed_exts.update(info.get('extensions', []))
-        
         # Check if folder name has compressed extension
-        if folder_path.suffix.lower() in compressed_exts:
+        if folder_path.suffix.lower() in self._compressed_exts:
             return True
         
         # Check if folder contains compressed files
         try:
             for item in folder_path.rglob('*'):
-                if item.is_file() and item.suffix.lower() in compressed_exts:
+                if item.is_file() and item.suffix.lower() in self._compressed_exts:
                     return True
         except (PermissionError, OSError) as e:
             self.logger.warning(f"Could not fully check {folder_path.name}: {e}")
