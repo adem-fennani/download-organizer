@@ -158,8 +158,11 @@ class DownloadOrganizer:
         
         return False
     
-    def _move_file(self, source: Path, destination_folder: Path, dry_run: bool = False) -> bool:
-        """Move a file to the destination folder."""
+    def _move_item(self, source: Path, destination_folder: Path, 
+                   dry_run: bool = False, is_folder: bool = False) -> bool:
+        """Move a file or folder to the destination."""
+        item_type = "folder" if is_folder else "file"
+        
         try:
             # Create destination directory if needed
             if self.config.get('settings', {}).get('create_directories', True):
@@ -173,27 +176,30 @@ class DownloadOrganizer:
                 dest_path = self._resolve_conflict(dest_path)
             
             if dry_run:
-                self.logger.info(f"[DRY RUN] Would move: {source.name} -> {dest_path}")
+                self.logger.info(f"[DRY RUN] Would move {item_type}: {source.name} -> {dest_path}")
             else:
-                self.logger.info(f"Moving: {source.name} -> {dest_path}")
+                self.logger.info(f"Moving {item_type}: {source.name} -> {dest_path}")
                 shutil.move(str(source), str(dest_path))
-                self.logger.info(f"Moved: {source.name}")
+                self.logger.info(f"Moved {item_type}: {source.name}")
             
-            self.stats.files_moved += 1
+            if is_folder:
+                self.stats.folders_moved += 1
+            else:
+                self.stats.files_moved += 1
             return True
             
         except PermissionError:
             self.logger.error(f"Permission denied: {source.name}")
             self.stats.errors += 1
             return False
-        except shutil.Error as e:
-            self.logger.error(f"Error moving {source.name}: {e}")
-            self.stats.errors += 1
-            return False
         except Exception as e:
-            self.logger.error(f"Unexpected error moving {source.name}: {e}")
+            self.logger.error(f"Error moving {item_type} {source.name}: {e}")
             self.stats.errors += 1
             return False
+    
+    def _move_file(self, source: Path, destination_folder: Path, dry_run: bool = False) -> bool:
+        """Move a file to the destination folder."""
+        return self._move_item(source, destination_folder, dry_run, is_folder=False)
     
     def _is_compressed_folder(self, folder_path: Path) -> bool:
         """Check if a folder contains compressed files (shallow check)."""
@@ -213,31 +219,7 @@ class DownloadOrganizer:
     
     def _move_folder(self, source: Path, destination_folder: Path, dry_run: bool = False) -> bool:
         """Move a folder to the destination."""
-        try:
-            if self.config.get('settings', {}).get('create_directories', True):
-                if not dry_run:
-                    destination_folder.mkdir(parents=True, exist_ok=True)
-            
-            dest_path = destination_folder / source.name
-            
-            # Handle conflicts
-            if self.config.get('settings', {}).get('handle_conflicts', True):
-                dest_path = self._resolve_conflict(dest_path)
-            
-            if dry_run:
-                self.logger.info(f"[DRY RUN] Would move folder: {source.name} -> {dest_path}")
-            else:
-                self.logger.info(f"Moving folder: {source.name} -> {dest_path}")
-                shutil.move(str(source), str(dest_path))
-                self.logger.info(f"Moved folder: {source.name}")
-            
-            self.stats.folders_moved += 1
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Error moving folder {source.name}: {e}")
-            self.stats.errors += 1
-            return False
+        return self._move_item(source, destination_folder, dry_run, is_folder=True)
     
     def organize_files(self, dry_run: bool = False) -> None:
         """Organize files from the downloads folder."""
