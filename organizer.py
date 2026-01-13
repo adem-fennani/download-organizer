@@ -50,7 +50,7 @@ class DownloadOrganizer:
         try:
             with open(config_path, 'r') as f:
                 config = yaml.safe_load(f)
-            return config
+            return self._normalize_extensions(config)
         except FileNotFoundError:
             raise FileNotFoundError(
                 f"Configuration file not found: {config_path}\n"
@@ -58,6 +58,12 @@ class DownloadOrganizer:
             )
         except yaml.YAMLError as e:
             raise ValueError(f"Error parsing configuration file: {e}")
+    
+    def _normalize_extensions(self, config: dict) -> dict:
+        """Normalize all file extensions to lowercase."""
+        for category, info in config.get('file_types', {}).items():
+            info['extensions'] = [ext.lower() for ext in info.get('extensions', [])]
+        return config
     
     def _validate_config(self, config: dict) -> None:
         """Validate required configuration keys."""
