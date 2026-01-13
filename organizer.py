@@ -11,7 +11,7 @@ import shutil
 import logging
 import argparse
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, DefaultDict
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -30,7 +30,7 @@ class OrganizationStats:
     errors: int = 0
     skipped: int = 0
     conflicts_resolved: int = 0
-    categories: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
+    categories: DefaultDict[str, int] = field(default_factory=lambda: defaultdict(int))
 
 
 class DownloadOrganizer:
