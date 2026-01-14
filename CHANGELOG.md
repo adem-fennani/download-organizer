@@ -2,6 +2,25 @@
 
 All notable changes to the download-organizer project.
 
+## [1.4.1] - 2026-01-14
+
+### Fixed
+- **File Encoding**: Added `encoding='utf-8'` parameter to config file loading
+  - Ensures consistent behavior across different systems and locales
+  - Properly handles non-ASCII characters in configuration files
+  - Prevents potential failures on systems with different default encodings
+- **Case Sensitivity**: Fixed file extension matching to be case-insensitive
+  - Extensions are now normalized to lowercase for reliable matching
+  - Prevents files with uppercase extensions from being miscategorized
+- **Statistics Tracking**: Implemented defaultdict for category statistics
+  - Eliminates KeyError risks when tracking file categories
+  - Cleaner code without manual key initialization
+
+### Changed
+- **Code Quality**: Extracted duplicate move logic into shared `_move_item()` method
+  - Reduced code duplication between `_move_file()` and `_move_folder()`
+  - Improved maintainability and consistency in error handling
+
 ## [1.4.0] - 2026-01-11
 
 ### Performance
