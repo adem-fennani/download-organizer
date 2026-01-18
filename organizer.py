@@ -139,7 +139,13 @@ class DownloadOrganizer:
         return base_dest / other_dest
     
     def _resolve_conflict(self, dest_path: Path) -> Path:
-        """Resolve file name conflicts by appending a counter."""
+        """Resolve file name conflicts by appending a counter.
+        
+        Note: There is an inherent race condition between checking file existence
+        and moving the file. In concurrent environments, another process could
+        create a file with the same name between the check and the move operation.
+        The move operation in _move_file handles this with try/except.
+        """
         if not dest_path.exists():
             return dest_path
         
