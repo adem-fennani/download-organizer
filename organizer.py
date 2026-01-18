@@ -40,6 +40,11 @@ class DownloadOrganizer:
         """Initialize the organizer with configuration."""
         self.config = self._load_config(config_path)
         self._validate_config(self.config)
+        
+        # Cache frequently accessed config sections
+        self._settings = self.config.get('settings', {})
+        self._folder_config = self.config.get('folders', {})
+        
         self.stats = OrganizationStats()
         self._compressed_exts = self._build_compressed_extensions()
         self._setup_logging()
@@ -164,10 +169,8 @@ class DownloadOrganizer:
     
     def _should_skip_file(self, file_path: Path) -> bool:
         """Check if file should be skipped based on settings."""
-        settings = self.config.get('settings', {})
-        
         # Skip hidden files if configured
-        if settings.get('skip_hidden_files', True) and file_path.name.startswith('.'):
+        if self._settings.get('skip_hidden_files', True) and file_path.name.startswith('.'):
             return True
         
         return False
@@ -179,14 +182,14 @@ class DownloadOrganizer:
         
         try:
             # Create destination directory if needed
-            if self.config.get('settings', {}).get('create_directories', True):
+            if self._settings.get('create_directories', True):
                 if not dry_run:
                     destination_folder.mkdir(parents=True, exist_ok=True)
             
             dest_path = destination_folder / source.name
             
             # Handle conflicts if enabled
-            if self.config.get('settings', {}).get('handle_conflicts', True):
+            if self._settings.get('handle_conflicts', True):
                 dest_path = self._resolve_conflict(dest_path)
             
             if dry_run:
@@ -204,6 +207,11 @@ class DownloadOrganizer:
             
         except PermissionError:
             self.logger.error(f"Permission denied: {source.name}")
+            self.stats.errors += 1
+            return False
+        except FileExistsError:
+            # Race condition: file was created after conflict resolution check
+            self.logger.error(f"File already exists (race condition): {dest_path.name}")
             self.stats.errors += 1
             return False
         except Exception as e:
@@ -263,10 +271,9 @@ class DownloadOrganizer:
         """Organize folders from the downloads folder."""
         source_dir = self._expand_path(self.config['source_directory'])
         base_dest = self._expand_path(self.config['base_destination'])
-        folder_config = self.config.get('folders', {})
         
-        compressed_dest = base_dest / folder_config.get('compressed_destination', 'Compressed Folders')
-        regular_dest = base_dest / folder_config.get('regular_destination', 'Folders')
+        compressed_dest = base_dest / self._folder_config.get('compressed_destination', 'Compressed Folders')
+        regular_dest = base_dest / self._folder_config.get('regular_destination', 'Folders')
         
         self.logger.info("Processing folders...")
         
