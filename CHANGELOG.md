@@ -2,6 +2,25 @@
 
 All notable changes to the download-organizer project.
 
+## [1.4.2] - 2026-01-18
+
+### Fixed
+- **Invalid Log Level Handling**: Added validation for log level configuration
+  - Validates log level against allowed values (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  - Falls back to INFO level with a warning if invalid level is specified
+  - Prevents AttributeError when invalid log levels are used in config
+- **Race Condition in File Operations**: Added FileExistsError handling in `_move_item()`
+  - Catches and handles race conditions when files are created between conflict resolution check and move operation
+  - Logs clear error message when race condition occurs
+  - Prevents crashes in concurrent environments
+  - Added documentation note in `_resolve_conflict()` explaining inherent race condition
+
+### Performance
+- **Optimized Config Access**: Cached frequently accessed configuration sections
+  - Cache `settings` and `folders` config sections during initialization
+  - Eliminates repeated dictionary lookups throughout file processing
+  - Reduces overhead when processing large numbers of files
+
 ## [1.4.1] - 2026-01-14
 
 ### Fixed
