@@ -87,7 +87,15 @@ class DownloadOrganizer:
     def _setup_logging(self) -> None:
         """Configure logging based on config settings."""
         log_config = self.config.get('logging', {})
-        level = getattr(logging, log_config.get('level', 'INFO'))
+        level_name = log_config.get('level', 'INFO').upper()
+        
+        # Validate log level
+        valid_levels = {'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'}
+        if level_name not in valid_levels:
+            print(f"Warning: Invalid log level '{level_name}', using INFO")
+            level_name = 'INFO'
+        
+        level = getattr(logging, level_name)
         
         handlers = []
         formatter = logging.Formatter(
