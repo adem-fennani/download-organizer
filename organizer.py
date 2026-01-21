@@ -6,6 +6,7 @@ directories based on file types, with support for conflict resolution,
 logging, and dry-run mode.
 """
 
+import sys
 import shutil
 import logging
 import argparse
@@ -18,7 +19,7 @@ try:
     import yaml
 except ImportError:
     print("Error: PyYAML is required. Install it with: pip install pyyaml")
-    exit(1)
+    sys.exit(1)
 
 
 @dataclass
@@ -385,13 +386,13 @@ Examples:
         
     except FileNotFoundError as e:
         print(f"Error: {e}")
-        exit(1)
+        sys.exit(1)
     except ValueError as e:
         print(f"Configuration Error: {e}")
-        exit(1)
+        sys.exit(1)
     except Exception as e:
         print(f"Fatal Error: {e}")
-        exit(1)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
