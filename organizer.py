@@ -6,12 +6,11 @@ directories based on file types, with support for conflict resolution,
 logging, and dry-run mode.
 """
 
-import os
 import shutil
 import logging
 import argparse
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, DefaultDict
+from typing import Dict, Optional, DefaultDict
 from dataclasses import dataclass, field
 from collections import defaultdict
 
