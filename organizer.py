@@ -47,8 +47,7 @@ class DownloadOrganizer:
         
         self.stats = OrganizationStats()
         self._compressed_exts = self._build_compressed_extensions()
-        self._setup_logging()
-        self.logger = logging.getLogger(__name__)
+        self.logger = self._setup_logging()
         
     def _load_config(self, config_path: str) -> dict:
         """Load configuration from YAML file."""
@@ -89,7 +88,7 @@ class DownloadOrganizer:
                 compressed_exts.update(info.get('extensions', []))
         return compressed_exts
     
-    def _setup_logging(self) -> None:
+    def _setup_logging(self) -> logging.Logger:
         """Configure logging based on config settings."""
         log_config = self.config.get('logging', {})
         level_name = log_config.get('level', 'INFO').upper()
@@ -102,7 +101,13 @@ class DownloadOrganizer:
         
         level = getattr(logging, level_name)
         
-        handlers = []
+        # Create logger-specific configuration instead of global basicConfig
+        logger = logging.getLogger(__name__)
+        logger.setLevel(level)
+        
+        # Clear any existing handlers to avoid duplicates
+        logger.handlers.clear()
+        
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'
@@ -111,15 +116,15 @@ class DownloadOrganizer:
         if log_config.get('log_to_console', True):
             console_handler = logging.StreamHandler()
             console_handler.setFormatter(formatter)
-            handlers.append(console_handler)
+            logger.addHandler(console_handler)
         
         if log_config.get('log_to_file', True):
             log_file = log_config.get('log_file', 'download_organizer.log')
             file_handler = logging.FileHandler(log_file)
             file_handler.setFormatter(formatter)
-            handlers.append(file_handler)
+            logger.addHandler(file_handler)
         
-        logging.basicConfig(level=level, handlers=handlers, force=True)
+        return logger
     
     def _expand_path(self, path_str: str) -> Path:
         """Expand user home directory and convert to absolute Path."""
