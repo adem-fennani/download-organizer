@@ -11,7 +11,7 @@ import shutil
 import logging
 import argparse
 from pathlib import Path
-from typing import Dict, Optional, DefaultDict
+from typing import Dict, Optional, DefaultDict, Any
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -49,7 +49,7 @@ class DownloadOrganizer:
         self._compressed_exts = self._build_compressed_extensions()
         self.logger = self._setup_logging()
         
-    def _load_config(self, config_path: str) -> dict:
+    def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Load configuration from YAML file."""
         try:
             with open(config_path, 'r', encoding='utf-8') as f:
