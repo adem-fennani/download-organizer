@@ -2,6 +2,21 @@
 
 All notable changes to the download-organizer project.
 
+## [1.4.3] - 2026-01-22
+
+### Fixed
+- **Logger Configuration**: Fixed logger initialization to use instance-specific logger instead of global configuration
+  - Logger is now properly returned from `_setup_logging()` and assigned to instance
+  - Prevents conflicts with other modules using logging
+  - Clears existing handlers to avoid duplicate log entries
+  - Uses logger-specific configuration instead of `basicConfig()`
+
+### Changed
+- **Code Quality**: Improved code maintainability and type safety
+  - Added return type hints to `_load_config()` and `_setup_logging()` methods
+  - Removed unused imports
+  - Replaced `exit()` with built-in `sys.exit()` for cleaner code
+
 ## [1.4.2] - 2026-01-18
 
 ### Fixed
