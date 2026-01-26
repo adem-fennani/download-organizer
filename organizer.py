@@ -47,6 +47,7 @@ class DownloadOrganizer:
         
         self.stats = OrganizationStats()
         self._compressed_exts = self._build_compressed_extensions()
+        self._ext_map = self._build_extension_map()
         self.logger = self._setup_logging()
         
     def _load_config(self, config_path: str) -> Dict[str, Any]:
@@ -87,6 +88,15 @@ class DownloadOrganizer:
             if 'compressed' in str(info.get('destination', '')).lower():
                 compressed_exts.update(info.get('extensions', []))
         return compressed_exts
+    
+    def _build_extension_map(self) -> Dict[str, tuple]:
+        """Build reverse lookup map: extension -> (category, destination)."""
+        ext_map = {}
+        for category, info in self.config.get('file_types', {}).items():
+            destination = info.get('destination', category)
+            for ext in info.get('extensions', []):
+                ext_map[ext.lower()] = (category, destination)
+        return ext_map
     
     def _setup_logging(self) -> logging.Logger:
         """Configure logging based on config settings."""
@@ -135,13 +145,11 @@ class DownloadOrganizer:
         extension = file_path.suffix.lower()
         base_dest = self._expand_path(self.config['base_destination'])
         
-        # Check each file type category
-        for category, info in self.config.get('file_types', {}).items():
-            extensions = info.get('extensions', [])
-            if extension in extensions:
-                dest_folder = info.get('destination', category)
-                self.stats.categories[category] += 1
-                return base_dest / dest_folder
+        # O(1) lookup instead of O(n) loop
+        if extension in self._ext_map:
+            category, dest_folder = self._ext_map[extension]
+            self.stats.categories[category] += 1
+            return base_dest / dest_folder
         
         # No matching category found
         other_dest = self.config.get('other_destination', 'Other')
