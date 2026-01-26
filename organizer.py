@@ -11,7 +11,7 @@ import shutil
 import logging
 import argparse
 from pathlib import Path
-from typing import Dict, Optional, DefaultDict, Any
+from typing import Dict, Optional, DefaultDict, Any, List, Set, Tuple
 from dataclasses import dataclass, field
 from collections import defaultdict
 
@@ -256,8 +256,59 @@ class DownloadOrganizer:
         """Move a folder to the destination."""
         return self._move_item(source, destination_folder, dry_run, is_folder=True)
     
+    def _batch_create_directories(self, directories: Set[Path], dry_run: bool = False) -> None:
+        """Batch create all destination directories at once."""
+        if not self._settings.get('create_directories', True):
+            return
+        
+        for directory in directories:
+            if dry_run:
+                self.logger.debug(f"[DRY RUN] Would create directory: {directory}")
+            else:
+                directory.mkdir(parents=True, exist_ok=True)
+    
+    def _collect_file_operations(self, source_dir: Path) -> List[Tuple[Path, Path]]:
+        """Collect all file operations to be performed.
+        
+        Returns:
+            List of (source_file, destination_folder) tuples
+        """
+        operations = []
+        
+        for item in source_dir.iterdir():
+            if item.is_file():
+                if self._should_skip_file(item):
+                    self.logger.debug(f"Skipping: {item.name}")
+                    self.stats.skipped += 1
+                    continue
+                
+                dest_folder = self._get_destination_for_file(item)
+                if dest_folder:
+                    operations.append((item, dest_folder))
+        
+        return operations
+    
+    def _execute_batch_operations(self, operations: List[Tuple[Path, Path]], 
+                                   dry_run: bool = False) -> None:
+        """Execute batched file operations.
+        
+        Args:
+            operations: List of (source_file, destination_folder) tuples
+            dry_run: Whether to simulate operations without moving files
+        """
+        if not operations:
+            return
+        
+        # Batch create all destination directories
+        unique_destinations = {dest_folder for _, dest_folder in operations}
+        self._batch_create_directories(unique_destinations, dry_run)
+        
+        # Execute file moves
+        for source, dest_folder in operations:
+            self._move_file(source, dest_folder, dry_run)
+    
     def organize_files(self, dry_run: bool = False) -> None:
-        """Organize files from the downloads folder."""
+        """Organize files from the downloads folder using batch operations."""
         source_dir = self._expand_path(self.config['source_directory'])
         
         if not source_dir.exists():
@@ -268,17 +319,11 @@ class DownloadOrganizer:
         if dry_run:
             self.logger.info("DRY RUN MODE - No files will be moved")
         
-        # Process files
-        for item in source_dir.iterdir():
-            if item.is_file():
-                if self._should_skip_file(item):
-                    self.logger.debug(f"Skipping: {item.name}")
-                    self.stats.skipped += 1
-                    continue
-                
-                dest_folder = self._get_destination_for_file(item)
-                if dest_folder:
-                    self._move_file(item, dest_folder, dry_run)
+        # Collect all file operations
+        operations = self._collect_file_operations(source_dir)
+        
+        # Execute batched operations
+        self._execute_batch_operations(operations, dry_run)
     
     def organize_folders(self, dry_run: bool = False) -> None:
         """Organize folders from the downloads folder."""
