@@ -21,6 +21,13 @@ except ImportError:
     print("Error: PyYAML is required. Install it with: pip install pyyaml")
     sys.exit(1)
 
+# Optional progress bar support
+try:
+    from tqdm import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
+
 
 @dataclass
 class OrganizationStats:
@@ -48,6 +55,7 @@ class DownloadOrganizer:
         self.stats = OrganizationStats()
         self._compressed_exts = self._build_compressed_extensions()
         self._ext_map = self._build_extension_map()
+        self._has_tqdm = HAS_TQDM and self._settings.get('show_progress', True)
         self.logger = self._setup_logging()
         
     def _load_config(self, config_path: str) -> Dict[str, Any]:
@@ -135,6 +143,12 @@ class DownloadOrganizer:
             logger.addHandler(file_handler)
         
         return logger
+    
+    def _get_progress_iterator(self, iterable, desc: str = "Processing"):
+        """Wrap an iterable with a progress bar if tqdm is available."""
+        if self._has_tqdm:
+            return tqdm(iterable, desc=desc, unit="items")
+        return iterable
     
     def _expand_path(self, path_str: str) -> Path:
         """Expand user home directory and convert to absolute Path."""
@@ -274,8 +288,9 @@ class DownloadOrganizer:
             List of (source_file, destination_folder) tuples
         """
         operations = []
+        items = list(source_dir.iterdir())
         
-        for item in source_dir.iterdir():
+        for item in self._get_progress_iterator(items, desc="Scanning files"):
             if item.is_file():
                 if self._should_skip_file(item):
                     self.logger.debug(f"Skipping: {item.name}")
@@ -303,8 +318,8 @@ class DownloadOrganizer:
         unique_destinations = {dest_folder for _, dest_folder in operations}
         self._batch_create_directories(unique_destinations, dry_run)
         
-        # Execute file moves
-        for source, dest_folder in operations:
+        # Execute file moves with progress bar
+        for source, dest_folder in self._get_progress_iterator(operations, desc="Moving files"):
             self._move_file(source, dest_folder, dry_run)
     
     def organize_files(self, dry_run: bool = False) -> None:
@@ -335,18 +350,19 @@ class DownloadOrganizer:
         
         self.logger.info("Processing folders...")
         
-        for item in source_dir.iterdir():
-            if item.is_dir():
-                if self._should_skip_file(item):
-                    self.logger.debug(f"Skipping folder: {item.name}")
-                    self.stats.skipped += 1
-                    continue
-                
-                # Determine if it's a compressed folder
-                if self._is_compressed_folder(item):
-                    self._move_folder(item, compressed_dest, dry_run)
-                else:
-                    self._move_folder(item, regular_dest, dry_run)
+        items = [item for item in source_dir.iterdir() if item.is_dir()]
+        
+        for item in self._get_progress_iterator(items, desc="Organizing folders"):
+            if self._should_skip_file(item):
+                self.logger.debug(f"Skipping folder: {item.name}")
+                self.stats.skipped += 1
+                continue
+            
+            # Determine if it's a compressed folder
+            if self._is_compressed_folder(item):
+                self._move_folder(item, compressed_dest, dry_run)
+            else:
+                self._move_folder(item, regular_dest, dry_run)
     
     def print_summary(self) -> None:
         """Print a summary of the organization operation."""
